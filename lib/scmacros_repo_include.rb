@@ -31,34 +31,14 @@ module ScmacrosRepositoryInclude
       raise 'Page not found'
     end   
 
-    # Link structure is as follows below. {} braces denotes optional parts, if they're not present, a default value is assumed.
-    # That means the current main repository or the latest revision on current branch.
-    # project_name/repository/{repo_name}/{revisions/revision_hash}/entry/file_path
     project_name, repo_name, revision_hash, file_path = IncludeHelper::parse_url_path(path.captures[0])
-    # (/^([^\/]+)\/repository\/
-    # (?: # odstranit
-    #   (?:
-    #     (
-    #       [^\/]+
-    #     )?\/
-    #   )?
-    #   (?:
-    #     revisions\/([^\/]+)\/
-    #   )?
-    # )?  # odstranit
-    # entry\/(.+)$/
-    #
-    #
-    #
-
-    # kontrola pristupu k repo ala app helper
 
     project = Project.visible.find_by_identifier(project_name)
 
     if repo_name.nil?
       repo = project.repository # no repository implicitly means the current main repository
     else
-      repo = project.repositories.detect do |repo| repo.identifier == repo_name
+      repo = project.repositories.detect do |repo| repo.identifier == repo_name # detect checks user's permissions for repo
       end
     end
 
