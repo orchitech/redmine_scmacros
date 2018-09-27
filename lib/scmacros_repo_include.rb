@@ -103,24 +103,26 @@ module ScmacrosRepositoryInclude
   end
 
   Redmine::WikiFormatting::Macros.register do
-    desc "Includes and formats a file from repository as an Asciidoc.\n\n" +
+    desc "Includes and formats a file from repository in wiki format.\n\n" +
        " \{{repo_includemd(file_path)}}\n"
-    macro :repo_includeascii do |obj, args|
+    macro :repo_includemd do |obj, args|
 
-      text = ScmacrosRepositoryInclude.read_file_from_link(textilizable(args[0]))
-      executed_text = textilizable(text, formatting: false)
-      return executed_text
+      return nil if args.length < 1
+
+      text = ScmacrosRepositoryInclude.read_file_from_link(textilizable(args[0].strip))
+      return text
     end
   end
 
   Redmine::WikiFormatting::Macros.register do
-    desc "Includes and formats a file containing other include macros from repository as an Asciidoc.\n\n" +
-             " \{{repo_includemd(file_path)}}\n"
-    macro :repo_includenestedascii do |obj, args|
+    desc "Includes and formats a file from repository as an Asciidoc.\n\n" +
+             " \{{repo_includeascii(file_path)}}\n"
+    macro :repo_includeascii do |obj, args|
 
-      text = ScmacrosRepositoryInclude.read_file_from_link(textilizable(args[0]))
-      executed_text = textilizable(text, formatting: false)
-      formatter =  RedmineAsciidocFormatter::WikiFormatting::Formatter.new(executed_text)
+      return nil if args.length < 1
+
+      text = ScmacrosRepositoryInclude.read_file_from_link(textilizable(args[0].strip))
+      formatter =  RedmineAsciidocFormatter::WikiFormatting::Formatter.new(text)
       o = formatter.to_html
       o = o.html_safe
       return o
