@@ -1,6 +1,7 @@
 require "minitest/autorun"
 require "../lib/include_helper"
-class RegexpTest < Minitest::Test
+require "test_helper"
+class RegexpTest < ActionController::TestCase
 
   def setup
   end

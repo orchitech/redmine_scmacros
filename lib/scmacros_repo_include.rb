@@ -114,7 +114,7 @@ module ScmacrosRepositoryInclude
   end
 
   Redmine::WikiFormatting::Macros.register do
-    desc "Includes and formats a file from repository as an Asciidoc.\n\n" +
+    desc "Includes and formats a file containing other include macros from repository as an Asciidoc.\n\n" +
              " \{{repo_includemd(file_path)}}\n"
     macro :repo_includenestedascii do |obj, args|
 
