@@ -42,26 +42,28 @@ Required
 
 Redmine 1.3.0 later
 
+https://github.com/gpr/redmine_asciidoc_formatter[redmine_asciidoc_formatter]
+
+
 Documentation
 -------------
 
-To include a repository file and format it:
+To include a repository file:
 
 -------------------------------
-{{repo_include(file_path)}} <1>
+{{repo_include(file_path)}}
 
 {{repo_include(file_path, revision)}}
 
-{{repo_includewiki(file_path)}} <2>
-
-{{repo_includemd(file_path)}} <3>
+{{repo_includewiki(file_path)}}  // current wiki formatting will be used
 -------------------------------
+To include a repository file and format it as markdown or asciidoc:
+-------------------------------
+{{repo_includemd(file_path)}} <1>
 
-<1> +file_path+ is the file to include.
-
-<2> Format the file as Textile.
-
-<3> Format the file as Markdown.
+{{repo_includeascii(file_path)}} <1>
+-------------------------------
+(1) You can use Redmine's linking syntax to link to a file in specific project, repository and/or revision. See section 'Repository files' http://www.redmine.org/projects/redmine/wiki/RedmineTextFormattingRedmineLinks[here].
 
 TODO
 ----
@@ -79,7 +81,9 @@ Example of additional feature:
 Known Issues
 ------------
 
-None.
+When using 'repo_includemd' or 'repo_includeascii', linking to a file contained in root of the repository in specific revision or branch doesn't work. Example: '{{repo_includemd(source:file.md@master)}}'
+
+This is caused by a bug in redmine's link parsing, which will recognize the link as two links, one to 'source' and the other one as a mail address 'file.md@master'.
 
 Notes
 -----
