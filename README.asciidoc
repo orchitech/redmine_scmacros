@@ -42,8 +42,7 @@ Required
 
 Redmine 1.3.0 later
 
-https://github.com/gpr/redmine_asciidoc_formatter[redmine_asciidoc_formatter]
-
+https://github.com/asciidoctor/asciidoctor[Asciidoctor]
 
 Documentation
 -------------

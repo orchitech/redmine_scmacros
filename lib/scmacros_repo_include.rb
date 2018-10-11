@@ -15,8 +15,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 require 'redmine'
-require 'redmine_asciidoc_formatter'
 require 'include_helper'
+require 'asciidoctor'
 
 module ScmacrosRepositoryInclude
 
@@ -80,9 +80,8 @@ module ScmacrosRepositoryInclude
              " \{{repo_includemd(file_path)}}\n"
     macro :repo_includeascii do |obj, args|
 
-      text = IncludeHelper.read_file_from_link(textilizable(args[0]))[0]
-      formatter =  RedmineAsciidocFormatter::WikiFormatting::Formatter.new(text)
-      o = formatter.to_html
+      text = IncludeHelper.read_file_from_link(textilizable(args[0]))
+      o = Asciidoctor.convert text
       o = o.html_safe
       return o
     end

@@ -19,4 +19,5 @@ class LinkGenerationTest < Redmine::HelperTest
     end
   end
 
+
 end

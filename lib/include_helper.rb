@@ -3,7 +3,7 @@ class IncludeHelper
   # project_name:source:repo_name|path/to/file.txt
   # Parses a hyperlink to a file in repository and return the file's contents in UTF8 encoding and the repo (for testing purposes)
   def self.read_file_from_link(link)
-    repo, file_path, revision_hash = IncludeHelper.get_repo_and_file_from_link(link)
+    repo, revision_hash, file_path = IncludeHelper.get_repo_and_file_from_link(link)
     text = repo.cat(file_path, revision_hash)
     return Redmine::CodesetUtil.to_utf8_by_setting(text)
   end
