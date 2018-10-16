@@ -3,8 +3,8 @@ Redmine Scmacros
 Gregory ROMÉ, Mitsuhiro YOSHITANI
 v0.2.0, 02-oct-2013
 
-Copyright (C) 2010-2013 Gregory ROMÉ
-Copyright (C) 2011 Mitsuhiro YOSHITANI
+Copyright (C) Orchitech?
+Copyright (C) TODO
 
 This plugin provides Wiki macros related to repositories.
 
@@ -12,6 +12,7 @@ License
 -------
 
 --------------------------------------------------------------------------------
+// TODO change license?
 Copyright (C) 2010-2013 Gregory ROMÉ
 Copyright (C) 2011 Mitsuhiro YOSHITANI
 
@@ -33,49 +34,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 Installation
 ------------
 
-See redmine plugin installation howto.
-
-This plugin does not modify the database.
+See the http://www.redmine.org/projects/redmine/wiki/Plugins#Installing-a-plugin[howto] for Redmine plugin installation.
 
 Required
 --------
 
-Redmine 1.3.0 later
+Redmine 1.3.0 or later
 
-https://github.com/asciidoctor/asciidoctor[Asciidoctor]
+Gems for the markup language you wish to include. Put these into the plugin's Gemfile.
+For list of gems, see https://github.com/github/markup#markups[here].
 
 Documentation
 -------------
 
 To include a repository file:
 
--------------------------------
+
 {{repo_include(file_path)}}
 
-{{repo_include(file_path, revision)}}
-
-{{repo_includewiki(file_path)}}  // current wiki formatting will be used
--------------------------------
-To include a repository file and format it as markdown or asciidoc:
--------------------------------
-{{repo_includemd(file_path)}} <1>
-
-{{repo_includeascii(file_path)}} <1>
--------------------------------
-(1) You can use Redmine's linking syntax to link to a file in specific project, repository and/or revision. See section 'Repository files' http://www.redmine.org/projects/redmine/wiki/RedmineTextFormattingRedmineLinks[here].
-
-TODO
-----
-
-The macro must be extended for controlling if the Wiki format is applied or not.
-Moreover a code block could be also used for code inclusion. Maybe those options
-should be added by using another macro name.
-
-Example of additional feature:
-
------------------------------------------------
-{{repo_include(file_path, revision, is_block)}}
------------------------------------------------
+You can use Redmine's linking syntax to link to a file in specific project, repository and/or revision. See section 'Repository files' http://www.redmine.org/projects/redmine/wiki/RedmineTextFormattingRedmineLinks[here].
 
 Known Issues
 ------------
@@ -83,9 +60,3 @@ Known Issues
 When using 'repo_includemd' or 'repo_includeascii', linking to a file contained in root of the repository in specific revision or branch doesn't work. Example: '{{repo_includemd(source:file.md@master)}}'
 
 This is caused by a bug in redmine's link parsing, which will recognize the link as two links, one to 'source' and the other one as a mail address 'file.md@master'.
-
-Notes
------
-
-This plugin is very simple. It SHOULD be enhanced by adding new macros and by
-improving the first one.
