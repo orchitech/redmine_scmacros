@@ -41,7 +41,7 @@ Required
 
 Redmine 1.3.0 or later
 
-Gems for the markup language you wish to include. Put these into the plugin's Gemfile.
+Gems for the markup languages you wish to use. Put these into the plugin's Gemfile.
 For list of gems, see https://github.com/github/markup#markups[here].
 
 Documentation

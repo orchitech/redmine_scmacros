@@ -14,8 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
 require 'redmine'
-require 'include_helper'
+require 'github/markup'
 
 module ScmacrosRepositoryInclude
 
@@ -24,10 +25,71 @@ module ScmacrosRepositoryInclude
              " \{{repo_include(file_path)}}\n"
     macro :repo_include do |obj, args|
 
+      unless args.length == 1
+        raise "Got #{args.length} arguments, only one expected."
+      end
+
       text = IncludeHelper.read_file_from_link(textilizable(args[0]))
+      text = Redmine::CodesetUtil.to_utf8_by_setting(text)
       o = text.html_safe
       return o
     end
+  end
+end
+
+class IncludeHelper
+
+  # project_name:source:repo_name|path/to/file.txt
+  # Parses a hyperlink to a file in repository and return the file's contents and the repo (for testing purposes)
+  def self.read_file_from_link(link)
+    repo, revision_hash, file_path = IncludeHelper.get_repo_and_file_from_link(link)
+
+    unless repo.entry(file_path, revision_hash)
+      raise "The file with specified revision was not found."
+    end
+    text = repo.cat(file_path, revision_hash)
+    return GitHub::Markup.render(file_path, text);
+
+  end
+
+  # Link structure is as follows below. {} braces denote optional parts, if these parts are missing, a default value is assumed.
+  # That means the current main repository or the latest revision on current branch.
+  # project_name/repository/{repo_name}/{revisions/revision_hash}/entry/file_path
+  def self.parse_url_path(path)
+    return path.match(
+        %r{
+      /([^/]+)/ #project_name
+      repository/
+      (?:
+        ([^/]+)?/ #repo_name
+      )?
+      (?:revisions/
+        ([^/]+)/ #revision_hash
+      )?
+      entry/(.+)$ #file_path
+      }x
+    ).captures
+  end
+
+  def self.get_repo_and_file_from_link(link)
+    path = link.match(/<a class="source" href="(.+)">/)
+
+    if path.nil? # if current user doesn't have permissions to view the repo, the link is not generated.
+      raise "No permissions for viewing this file."
+    end
+
+    project_name, repo_name, revision_hash, file_path = IncludeHelper::parse_url_path(path.captures[0])
+
+    project = Project.visible.find_by_identifier(project_name)
+
+    if repo_name.nil?
+      repo = project.repository # no repository implicitly means the current main repository
+    else
+      repo = project.repositories.detect do |repo| repo.identifier == repo_name # detect checks user's permissions for repo
+      end
+    end
+
+    return repo, revision_hash, file_path
   end
 
 end
