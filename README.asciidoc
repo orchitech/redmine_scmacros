@@ -6,7 +6,7 @@ v0.2.0, 02-oct-2013
 Copyright (C) Orchitech?
 Copyright (C) TODO
 
-This plugin provides Wiki macros related to repositories.
+This plugin provides a Wiki macro for including various markup documents from repository.
 
 License
 -------
@@ -53,6 +53,8 @@ To include a repository file:
 {{repo_include(file_path)}}
 
 You can use Redmine's linking syntax to link to a file in specific project, repository and/or revision. See section 'Repository files' http://www.redmine.org/projects/redmine/wiki/RedmineTextFormattingRedmineLinks[here].
+
+Formatting of the file is decided using it's suffix (i.e. '.md' file will be formatted as a markdown document).
 
 Known Issues
 ------------

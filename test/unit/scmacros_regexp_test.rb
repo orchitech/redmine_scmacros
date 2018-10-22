@@ -11,7 +11,7 @@ class RegexpTest < Redmine::HelperTest
     }
 
     testcases.each do |path, result|
-      assert_equal(result, IncludeHelper::parse_url_path(path))
+      assert_equal(result, ScmacrosRepositoryInclude::parse_url_path(path))
     end
   end
 end

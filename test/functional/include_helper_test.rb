@@ -15,7 +15,7 @@ class LinkGenerationTest < Redmine::HelperTest
         'source:some/file' => @project.repository,
     }
 
-    testcases.each do |text, repo| assert_equal(repo, IncludeHelper.get_repo_and_file_from_link(textilizable(text))[0])
+    testcases.each do |text, repo| assert_equal(repo, ScmacrosRepositoryInclude.get_repo_and_file_from_link(textilizable(text))[0])
     end
   end
 
