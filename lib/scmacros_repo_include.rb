@@ -30,7 +30,7 @@ module ScmacrosRepositoryInclude
         raise "Got #{args.length} arguments, only one expected."
       end
 
-      text = ScmacrosRepositoryInclude.read_file_from_link(textilizable(args[0]))
+      text = ScmacrosRepositoryInclude.read_file_from_html(textilizable(args[0]))
       text = Redmine::CodesetUtil.to_utf8_by_setting(text)
       o = text.html_safe
       return o
@@ -41,13 +41,10 @@ module ScmacrosRepositoryInclude
 
   # project_name:source:repo_name|path/to/file.txt
   # Parses a hyperlink to a file in repository and return the file's contents and the repo (for testing purposes)
-  def self.read_file_from_link(link)
-    repo, revision_hash, file_path = ScmacrosRepositoryInclude.get_repo_and_file_from_link(link)
-
-    unless repo.entry(file_path, revision_hash)
-      raise "The file with specified revision was not found."
-    end
+  def self.read_file_from_html(html)
+    repo, revision_hash, file_path = ScmacrosRepositoryInclude.get_repo_and_file_from_html(html)
     text = repo.cat(file_path, revision_hash)
+    raise "The entry or revision was not found in the repository" if text.nil?
     return GitHub::Markup.render(file_path, text);
 
   end
@@ -71,17 +68,14 @@ module ScmacrosRepositoryInclude
     ).captures
   end
 
-  def self.get_repo_and_file_from_link(link)
+  def self.get_repo_and_file_from_html(html)
 
-    path = Nokogiri::HTML(link).xpath('//a/@href').map { |link| link.value }
+    path = Nokogiri::HTML(html).xpath('//a/@href').map { |link| link.value }
     path = path[0]
 
-    if path.nil? # if current user doesn't have permissions to view the repo, the link is not generated.
-      raise "No permissions for viewing this file."
-    end
+    raise "No permissions for viewing this file." if path.nil?
 
     project_name, repo_name, revision_hash, file_path = ScmacrosRepositoryInclude.parse_url_path(path)
-
     project = Project.visible.find_by_identifier(project_name)
 
     if repo_name.nil?
